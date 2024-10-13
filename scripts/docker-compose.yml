@@ -20,7 +20,6 @@ services:
       "-c", "log_statement=all"
     ]
 
-
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.1
     hostname: zookeeper
@@ -56,29 +55,21 @@ services:
     depends_on:
       - zookeeper
 
-  kafka-connect:
-    image: confluentinc/cp-kafka-connect:7.0.1
-    hostname: kafka-connect
-    container_name: kafka-connect
+  debezium:
+    image: debezium/connect:1.9
+    container_name: debezium
     ports:
-      - "8083:8083"
+      - 8083:8083
     environment:
-      CONNECT_BOOTSTRAP_SERVERS: "kafka:9092"
-      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
-      CONNECT_GROUP_ID: "kafka-connect"
-      CONNECT_CONFIG_STORAGE_TOPIC: "connect-configs"
-      CONNECT_OFFSET_STORAGE_TOPIC: "connect-offsets"
-      CONNECT_STATUS_STORAGE_TOPIC: "connect-status"
-      CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_PLUGIN_PATH: "/usr/share/java,/etc/kafka-connect/jars"
-      CONNECT_HEARTBEAT_INTERVAL_MS: "5000"
-      CONNECT_RECONNECT_BACKOFF_MS: "1000"
-      CONNECT_RECONNECT_BACKOFF_MAX_MS: "10000"
-    volumes:
-      - ./kafka_connect/debezium-postgres-connector.json:/kafka/connect/debezium-postgres-connector.json
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: my_connect_configs
+      OFFSET_STORAGE_TOPIC: my_connect_offsets
+      STATUS_STORAGE_TOPIC: my_connect_statuses
+      BOOTSTRAP_SERVERS: kafka:19092
+      KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
     depends_on:
       - kafka
       - database

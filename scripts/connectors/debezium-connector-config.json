@@ -1,0 +1,17 @@
+{
+  "name": "pg-orders-source",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "database",
+    "database.port": "5432",
+    "database.user": "demo",
+    "database.password": "demo",
+    "database.dbname": "demo",
+    "database.server.name": "dbserver1",
+    "plugin.name": "pgoutput",
+    "table.include.list": "public.store",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "tombstones.on.delete": "false",
+    "delete.handling.mode": "rewrite"
+  }
+}
