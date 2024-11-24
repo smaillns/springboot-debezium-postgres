@@ -12,6 +12,7 @@
     "table.include.list": "public.store",
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
     "tombstones.on.delete": "false",
-    "delete.handling.mode": "rewrite"
+    "delete.handling.mode": "rewrite",
+    "topic.prefix": "dbserver1"
   }
 }
